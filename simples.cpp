@@ -1,49 +1,45 @@
-#include <stdio.h>
+#include<stdio.h>
 
 struct No {
     int valor;
     No *prox;
 };
 
-struct lista {
+struct Lista {
     No *cabeca, *cauda;
     int n;
 
-    lista() {
+    Lista() {
         cabeca = cauda = NULL;
         n = 0;
     }
-    bool vazia() {
+
+    bool vazia() { // O(1)
         return (cabeca == NULL);
     }
 
-    int tamanho() {
-        return n;
-    }
-
-    void inserirInicio(int numero) {
+    void inserirInicio(int v) { // O(1)
         No *novo = new No();
-        novo->valor = numero;
-
-        if(vazia()) {
+        novo->valor = v;
+        if (vazia()) {
             novo->prox = NULL;
             cabeca = novo;
             cauda = novo;
-        }else {
+        } else {
             novo->prox = cabeca;
             cabeca = novo;
         }
         n++;
     }
 
-    void inserirFinal(int numero) {
+    void inserirFinal(int v) { // O(1)
         No *novo = new No();
-        novo->valor = numero;
-        if(vazia()) {
+        novo->valor = v;
+        if (vazia()) {
             novo->prox = NULL;
             cabeca = novo;
             cauda = novo;
-        }else {
+        } else {
             novo->prox = NULL;
             cauda->prox = novo;
             cauda = novo;
@@ -51,117 +47,29 @@ struct lista {
         n++;
     }
 
-    void apagarInicio() {
-        if(!vazia()) {
-            if(tamanho() == 1) {
-                No *aux = cabeca;
-                cabeca = NULL;
-                cauda = NULL;
-                delete(aux);
-            }else {
-                No *aux = cabeca;
-                cabeca = cabeca->prox;
-                delete(aux);
-            }
-        }
-        n--;
-    }
 
-    void apagarFinal() {
-        if(!vazia()) {
-            if(tamanho() == 1) {
-                No *aux = cabeca;
-                cabeca = NULL;
-                cauda = NULL;
-                delete(aux);
-            }else {
-                No *penultimo = cabeca;
-                while(penultimo->prox != cauda) {
-                    penultimo = penultimo->prox;
-                }
-                delete(cauda);
-                cauda = penultimo;
-                cauda->prox = NULL;
-            }
-        }
-        n--;
-    }
 
-    bool existe(int numero) {
-        No *proximo = cabeca;
-        int cont = 0;
-        while(proximo != cauda->prox) {
-            if(proximo->valor == numero) {
-                cont++;
-            }
-            proximo = proximo->prox;
-        }
-        if(cont > 0) {
-            return true;
-        }else {
-            return false;
-        }
-    }
-
-    void inserirApenas(int numero) {
-        if(!existe(numero)) {
-            inserirFinal(numero);
-        }
-    }
-
-  /*  void apagarN(int numero) {
+    void imprimir() { // O(n)
+        /*for (No *aux = cabeca; aux != NULL; aux = aux->prox) */
         No *aux = cabeca;
-        while(aux != cauda->prox) {
-            if(aux == cabeca) {
-                apagarInicio();
-
-            }else if(aux == cauda) {
-                apagarFinal();
-            }else {
-                No *anterior = cabeca;
-                while(anterior != cauda->prox) {
-                    if(anterior->prox == aux) {
-                        anterior->prox = aux->prox;
-                        delete(anterior);
-                        anterior = anterior->prox;
-                    }
-                }
-            }
-            n--;
-            aux = aux->prox;
-        }
-    }
-*/
-
-void apagarTodos(int numero) {
-    No* atual = cabeca;
-    No* anterior = NULL;
-    while (atual != NULL) {
-        if (atual->valor == numero) {
-            // removemos o nó atual
-            if (anterior == NULL) {
-                cabeca = atual->prox;
-                delete atual;
-                atual = cabeca;
-            } else {
-                anterior->prox = atual->prox;
-                delete atual;
-                atual = anterior->prox;
-            }
-            n--;
-        } else {
-            anterior = atual;
-            atual = atual->prox;
-        }
-    }
-}
-
-    void imprimir() {
-    No *aux = cabeca;
-        do {
+        while (aux != NULL) {
             printf("%d\n", aux->valor);
             aux = aux->prox;
-        }while(aux !=cauda->prox);
+        }
+    }
+
+    /*int tamanho() { // O(n)
+        int t = 0;
+        No *aux = cabeca;
+        while (aux != NULL) {
+            t++;
+            aux = aux->prox;
+        }
+        return t;
+    }*/
+
+    int tamanho() { // O(1)
+        return n;
     }
 
 
@@ -169,15 +77,17 @@ void apagarTodos(int numero) {
 
 int main() {
 
-    lista l;
-    l.inserirInicio(5);
-    l.inserirInicio(7);
-    l.inserirInicio(9);
-    l.inserirFinal(11);
-    l.inserirFinal(10);
-    l.apagarTodos(11);
+    Lista l;
+    int quantidade, paginas;
+
+    scanf("%d", &quantidade);
+
+    for(int i = 0; i < quantidade; i++) {
+        scanf("%d",&paginas);
+        l.inserirFinal(paginas);
+    }
     l.imprimir();
 
 
-return 0;
+    return 0;
 }
